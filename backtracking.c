@@ -2,7 +2,7 @@
 #define N 8
 
 int valid(int pos_x, int pos_y, int board[N][N]);
-int movement(int move_x[N], int move_y[N], int *movimento, int pos1, int pos2, int board[N][N], int *casas, unsigned long int *back);
+int movement(int move_x[N], int move_y[N], int movimento, int pos1, int pos2, int board[N][N], int *casas, unsigned long int *back);
 
 
 int main()
@@ -22,7 +22,7 @@ int main()
     int board[N][N];
     for(int i=0;i<N;i++){
         for(int j=0;j<N;j++){
-            board[i][j]=0;
+            board[i][j]=-1;
         }
     }
     /*
@@ -35,11 +35,12 @@ int main()
     */
     int casas, movimento=1;
     unsigned long int back;
-    movement(move_x, move_y, &movimento, 0, 0, board, &casas, &back);
+    
+    movement(move_x, move_y, movimento, 0, 0, board, &casas, &back);
 
     for(int m=0;m<N;m++){
         for(int n=0;n<N;n++){
-            printf("%d ",board[m][n]);
+            printf(" %2d ",board[m][n]);
         }
         printf("\n");
     }
@@ -51,7 +52,7 @@ int main()
 //int valid(int pos_x, int pos_y, int move_x, int move_y, int board[N][N])
 int valid(int pos_x, int pos_y, int board[N][N])
 {
-    if(pos_x < 8 && pos_y < 8){
+    if(pos_x < 8 && pos_y < 8 && board[pos_x][pos_y] == -1){
     //se valido (==0)
         return 1;
     }else{
@@ -60,20 +61,26 @@ int valid(int pos_x, int pos_y, int board[N][N])
     }
 }
 //faz o movimento consultando a função valid
-int movement(int move_x[N], int move_y[N], int *movimento, int pos1, int pos2, int board[N][N], int *casas, unsigned long int *back)
+int movement(int move_x[N], int move_y[N], int movimento, int pos1, int pos2, int board[N][N], int *casas, unsigned long int *back)
 {
-    int possivel=0;
-
+    if(movimento==64)
+        return 1;
+    int x, y;
     for(int testes=0;testes<N;testes++)
     {
-        if(valid(pos1 + move_x[testes], pos2 + move_y[testes], board )){
-            pos1= pos1 + move_x[testes];
-            pos2= pos2 + move_y[testes];
-            board[pos1][pos2]=*movimento;
-            *movimento=*movimento+1;
-            ++possivel;
+        x= pos1 + move_x[testes];
+        y= pos2 + move_y[testes];
+        if(valid(x, y, board )){
+            board[x][y]=movimento;
+            //pos1= pos1 + move_x[testes];
+            //pos2= pos2 + move_y[testes];
+            ++movimento;
+            
+            if(movement(move_x, move_y, movimento, x, y, board, casas, back))
+                return 1;
+            else
+                board[x][y]=-1;
         }
-
-    }   
-
+    } 
+    return 0;
 }
