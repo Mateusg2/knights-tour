@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define N 8
-
+//alteraçoes feitas para teste do git hub blablablalbanlkdnca
 void result_tabuleiro(int tabuleiro[N][N]);
 int movimento_valido(int posicao_x , int posicao_y, int tabuleiro[N][N]);
 int backtracking(int posicao_x, int posicao_y, int completo, int tabuleiro[N][N], int horizontal[], int vertical[], unsigned long int *casas, unsigned long int *retorno);
