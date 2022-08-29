@@ -1,8 +1,9 @@
 #include <stdio.h>
 #define N 8
 
-int movement(int move_x[N], int move_y[N], int movimento, int pos1, int pos2, int board[N][N], int *casas, unsigned long int *back);
-int valid(int pos_x, int pos_y, int move_x, int move_y, int board[N][N]);
+int valid(int pos_x, int pos_y, int board[N][N]);
+int movement(int move_x[N], int move_y[N], int *movimento, int pos1, int pos2, int board[N][N], int *casas, unsigned long int *back);
+
 
 int main()
 {
@@ -45,24 +46,7 @@ int main()
 
     return 0;
 }
-//faz o movimento consultando a função valid
-int movement(int move_x[N], int move_y[N], int *movimento, int pos1, int pos2, int board[N][N], int *casas, unsigned long int *back)
-{
-    int possivel=0;
 
-    for(int testes=0;testes<N;testes++)
-    {
-        if(valid(pos1 + move_x[testes], pos2 + move_y[testes], board )){
-            pos1= pos1 + move_x;
-            pos2= pos2 + move_y;
-            board[pos1][pos2]=movimento;
-            *movimento=movimento+1;
-            ++possivel;
-        }
-
-    }   
-
-}
 //valid retorna 1 se o movimento for valido e retorna 0 do contrário
 //int valid(int pos_x, int pos_y, int move_x, int move_y, int board[N][N])
 int valid(int pos_x, int pos_y, int board[N][N])
@@ -74,4 +58,22 @@ int valid(int pos_x, int pos_y, int board[N][N])
     //se invalido (!= 0)
         return 0;
     }
+}
+//faz o movimento consultando a função valid
+int movement(int move_x[N], int move_y[N], int *movimento, int pos1, int pos2, int board[N][N], int *casas, unsigned long int *back)
+{
+    int possivel=0;
+
+    for(int testes=0;testes<N;testes++)
+    {
+        if(valid(pos1 + move_x[testes], pos2 + move_y[testes], board )){
+            pos1= pos1 + move_x[testes];
+            pos2= pos2 + move_y[testes];
+            board[pos1][pos2]=*movimento;
+            *movimento=*movimento+1;
+            ++possivel;
+        }
+
+    }   
+
 }
