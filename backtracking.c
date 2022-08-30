@@ -12,7 +12,7 @@ int main()
     e não é possível sair do tabuleiro.*/
     
     //para criar os oito movimentos diferentes do cavalo, estritamente tradados como
-    //m1,m2,m3,m4,m5,m6,m7,m8, será usado dois vetores: move_x e move_y
+    //m1,m2,m3,m4,m5,m6,m7,m8, serao usados dois vetores: move_x e move_y
     int move_x[]={-1,-2,-2,-1,1,2,2,1};
     int move_y[]={2,1,-1,-2,-2,-1,1,2};
     /* a combinaçao de um elemento de move_x com o respectivo elemento de move_y resulta
@@ -20,18 +20,21 @@ int main()
     
     //preenche o tabuleiro com zeros para evitar lixo de memória e distinguir posiçoes vazias
     int board[N][N];
+    
     for(int i=0;i<N;i++){
         for(int j=0;j<N;j++){
             board[i][j]=-1;
         }
     }
+    board[0][0]=0;
     /*
-    do{
-        if(movimento_mX == válido)
+    while(there are possible movements)
+    {
+        do if(movimento_mX == válido)
             do movimento_mX
         else    
             do movimento_mY
-    }while(there are possible movements);
+    }
     */
     int casas, movimento=1;
     unsigned long int back;
@@ -49,20 +52,20 @@ int main()
 }
 
 //valid retorna 1 se o movimento for valido e retorna 0 do contrário
-//int valid(int pos_x, int pos_y, int move_x, int move_y, int board[N][N])
 int valid(int pos_x, int pos_y, int board[N][N])
 {
-    if(pos_x < 8 && pos_y < 8 && board[pos_x][pos_y] == -1){
-    //se valido (==0)
+    if(pos_x < 8 && pos_x >=0 && pos_y < 8 && pos_y >=0 && board[pos_x][pos_y] == -1){
+    //se valido (==-1)
         return 1;
     }else{
-    //se invalido (!= 0)
+    //se invalido (!=-1)
         return 0;
     }
 }
 //faz o movimento consultando a função valid
 int movement(int move_x[N], int move_y[N], int movimento, int pos1, int pos2, int board[N][N], int *casas, unsigned long int *back)
-{
+{   
+    //significa que o tabuleiro esta completo
     if(movimento==64)
         return 1;
     int x, y;
@@ -70,13 +73,12 @@ int movement(int move_x[N], int move_y[N], int movimento, int pos1, int pos2, in
     {
         x= pos1 + move_x[testes];
         y= pos2 + move_y[testes];
-        if(valid(x, y, board )){
-            board[x][y]=movimento;
-            //pos1= pos1 + move_x[testes];
-            //pos2= pos2 + move_y[testes];
-            ++movimento;
+        
+        if(valid(x, y, board )==1){
             
-            if(movement(move_x, move_y, movimento, x, y, board, casas, back))
+            board[x][y]=movimento;
+
+            if(movement(move_x, move_y, movimento+1, x, y, board, casas, back))
                 return 1;
             else
                 board[x][y]=-1;
